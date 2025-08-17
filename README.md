@@ -1,9 +1,3 @@
-# parking
-Collaborative Parking App
-Got it — let’s stitch everything together into a **single coherent README** with a concise intro at the top.
-I’ll keep the intro short and sober: what the project is, what the PoC does, and why it exists.
-
----
 
 # 🅿️ Collaborative Parking App (PoC)
 
@@ -24,10 +18,76 @@ Goal of this PoC: **prove the core loop** before investing in gamification, ML, 
 
 ## 1. Backend (FastAPI + Postgres/PostGIS)
 
-### Core API Endpoints
+### Core Endpoints
 
-* **POST /spot** → Report leaving/found spot. Backend snaps GPS to a cell (\~100 m), delays publishing (anti-tracking), sets dynamic TTL (3–10 min).
-* **GET /spots** → Return nearby spots as cell centroids + TTL countdown + confidence label.
+#### **POST /spot** → report leaving/found spot
+
+**Request payload:**
+
+```json
+{
+  "user_id": "hashed_or_uuid",
+  "lat": 34.020882,
+  "lon": -6.841650,
+  "type": "leaving",   // or "found"
+  "timestamp": "2025-08-16T14:00:00Z"
+}
+```
+
+**Backend logic:**
+
+* Store raw GPS (internal use).
+* Snap to cell (\~100 m).
+* Apply **publish delay** (anti-tracking).
+* Compute `expires_at` based on TTL rules (zone/time).
+
+**Response example:**
+
+```json
+{
+  "status": "ok",
+  "spot_id": 123,
+  "cell_id": "cell_34.021_-6.842",
+  "expires_at": "2025-08-16T14:05:00Z"
+}
+```
+
+---
+
+#### **GET /spots** → fetch available spots
+
+**Query params:**
+
+* `lat` (float) → user location
+* `lon` (float) → user location
+* `radius_meters` (int, optional, default=1000)
+
+**Response example:**
+
+```json
+{
+  "spots": [
+    {
+      "id": 123,
+      "cell_lat": 34.021,        // centroid of obfuscated cell
+      "cell_lon": -6.842,
+      "type": "found",
+      "expires_in": 180,         // seconds remaining
+      "confidence": "medium"     // "high", "medium", "low"
+    },
+    {
+      "id": 124,
+      "cell_lat": 34.019,
+      "cell_lon": -6.840,
+      "type": "leaving",
+      "expires_in": 300,
+      "confidence": "high"
+    }
+  ]
+}
+```
+
+---
 
 ### DB Schema
 
@@ -117,11 +177,3 @@ CREATE TABLE parking_spots (
 * Analytics dashboard (spot turnover, accuracy).
 * ML-based TTL instead of rules.
 * Gamification + freemium tier.
-
----
-
-👉 This README gives you a **self-contained blueprint**: what the project is, what the PoC does, how to deploy it free, and what’s next.
-
----
-
-Would you like me to now add the **folder structure + docker-compose sketch** into this README (so you can literally spin it up locally), or keep that separate?
