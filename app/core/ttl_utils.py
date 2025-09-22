@@ -89,9 +89,9 @@ def calculate_confidence(expires_at: datetime, current_time: datetime = None) ->
     seconds_remaining = (expires_at - current_time).total_seconds()
     thresholds = parse_confidence_thresholds()
 
-    if seconds_remaining < thresholds["FRESH"]:
+    if seconds_remaining >= thresholds["FADING"]:
         return "high"
-    elif seconds_remaining < thresholds["FADING"]:
+    elif seconds_remaining >= thresholds["FRESH"]:
         return "medium"
     else:
         return "low"
