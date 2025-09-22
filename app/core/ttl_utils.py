@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Literal
 from dotenv import load_dotenv
 import os
@@ -81,7 +81,7 @@ def calculate_confidence(expires_at: datetime, current_time: datetime = None) ->
     Calculate confidence level based on time remaining until expiration.
     """
     if current_time is None:
-        current_time = datetime.utcnow()
+        current_time = datetime.now(timezone.utc)
 
     if expires_at <= current_time:
         return "low"
@@ -101,7 +101,7 @@ def get_seconds_remaining(expires_at: datetime, current_time: datetime = None) -
     Get seconds remaining until expiration.
     """
     if current_time is None:
-        current_time = datetime.utcnow()
+        current_time = datetime.now(timezone.utc)
 
     if expires_at <= current_time:
         return 0

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from datetime import datetime
+from datetime import datetime, timezone
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Point
 
@@ -64,7 +64,7 @@ def get_spots(lat: float, lon: float, radius_meters: int = 1000, db: Session = D
     Fetch available parking spots within radius.
     """
     try:
-        current_time = datetime.utcnow()
+        current_time = datetime.now(timezone.utc)
 
         # Query spots within radius that haven't expired
         # Using PostGIS ST_DWithin for efficient spatial query
