@@ -70,8 +70,8 @@ def get_spots(lat: float, lon: float, radius_meters: int = 1000, db: Session = D
         # Using PostGIS ST_DWithin for efficient spatial query
         query = text("""
             SELECT id, type, cell_id, expires_at,
-                   ST_Y(ST_Centroid(location)) as lat,
-                   ST_X(ST_Centroid(location)) as lon
+                   ST_Y(ST_Centroid(location::geometry)) as lat,
+                   ST_X(ST_Centroid(location::geometry)) as lon
             FROM parking_spots
             WHERE expires_at > :current_time
             AND ST_DWithin(
