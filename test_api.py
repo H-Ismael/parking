@@ -6,7 +6,7 @@ Run this after starting the API to verify it's working correctly.
 
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 BASE_URL = "http://localhost:8000"
 
@@ -27,7 +27,7 @@ def test_create_spot():
         "lat": 34.020882,
         "lon": -6.841650,
         "type": "leaving",
-        "timestamp": datetime.utcnow().isoformat() + "Z"
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
     response = requests.post(f"{BASE_URL}/api/v1/spot", json=spot_data)
