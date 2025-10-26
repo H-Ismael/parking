@@ -9,7 +9,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Parking Spot API",
-    description="Privacy-safe crowdsourced parking spot reporting API",
+    description="Crowdsourced parking spot reporting API",
     version="0.1.0"
 )
 

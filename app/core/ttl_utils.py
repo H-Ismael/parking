@@ -46,7 +46,7 @@ def calculate_ttl_seconds(lat: float, lon: float, spot_type: str, timestamp: dat
 
     base_ttl = ttl_bands.get(zone_type, ttl_bands["URBAN"])
 
-    # Adjust TTL based on spot type
+    # Adjust TTL based on spot type #ToDo => synth in rule engine (json file to start with)
     if spot_type == "leaving":
         # "Leaving" spots might be more reliable
         multiplier = 1.0
@@ -54,7 +54,7 @@ def calculate_ttl_seconds(lat: float, lon: float, spot_type: str, timestamp: dat
         # "Found" spots might be less reliable
         multiplier = 0.8
 
-    # Adjust based on time of day (simple heuristic for PoC)
+    # Adjust based on time of day (simple heuristic for PoC) 
     hour = timestamp.hour
     if 7 <= hour <= 9 or 17 <= hour <= 19:  # Peak hours
         multiplier *= 0.6  # Shorter TTL during peak hours
