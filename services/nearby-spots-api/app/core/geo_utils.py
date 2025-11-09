@@ -47,7 +47,8 @@ def add_obfuscation_jitter(lat: float, lon: float) -> Tuple[float, float]:
     jitter_lat_deg = OBFUSCATION_JITTER_METERS * lat_deg_per_meter
     jitter_lon_deg = OBFUSCATION_JITTER_METERS * lon_deg_per_meter
 
-    # Add random jitter within the range
+    # Add random jitter within the range 
+    # Todo : minimize jitter
     jitter_lat = random.uniform(-jitter_lat_deg, jitter_lat_deg)
     jitter_lon = random.uniform(-jitter_lon_deg, jitter_lon_deg)
 
