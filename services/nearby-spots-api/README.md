@@ -155,6 +155,7 @@ CREATE TABLE parking_spots (
 * `TTL_BAND=CBD_PEAK:180|URBAN:360|RESIDENTIAL:600`
 * `OBFUSCATION_JITTER_METERS=15`
 * `CONFIDENCE_THRESHOLDS=FRESH:<90s|FADING:<240s|LOW:>=240s`
+* ToDo => create proper tables for the above.
 
 ---
 
@@ -177,3 +178,21 @@ CREATE TABLE parking_spots (
 * Analytics dashboard (spot turnover, accuracy).
 * ML-based TTL instead of rules.
 * Gamification + freemium tier.
+
+## 9. Immmediate next
+
+- Add user sessions - tables , rank => beside gamification (credit system) it will serve as an additional signal source.
+	- Gamification : credit system to retain and reward best users. 
+	- Quality Signal/Data source : 
+		- If number n_users of app users are within user_radius e.g 100 meters then set threshold to be used for final score update of the cell(user_app_density_score = user_r_coverage ).(take into account special driver categ : "dev" , "trusted sources" , "regulars"(ranked by credit sys).) 
+		- Capture business params to update regularly the new "congestion" scores (cold map ) .
+		
+- displace TTL params from env to a table 
+	- for busy geo / zones so that it can be updated but with slow freq
+	- for time zone same slow frequency but account for offdays / events / seasonal events
+		- Potential sources : 
+					- 2023 study for Casa
+					- https://data.humdata.org
+					- Passive feedback from users for adaptive heatmap as well as later analytics.(mid to high trusted source).
+					- Addional datacollection from waze api or brokers
+					- holidays calendars (per cities) as tables.
